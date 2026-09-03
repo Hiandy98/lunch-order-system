@@ -7,7 +7,7 @@ services:
     container_name: lunch-order-backend
     restart: always
     ports:
-      - "8081:8081"
+      - "8081:8080"
     env_file:
       - .env
       - ./backend/.env
