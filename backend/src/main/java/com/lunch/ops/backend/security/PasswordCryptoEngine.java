@@ -14,7 +14,7 @@ public class PasswordCryptoEngine {
     //TODO pepper 暫時先這樣注入 之後用 setting 之類的做法
     public PasswordCryptoEngine(
             PasswordEncoder passwordEncoder,
-            @Value("${security.value.pepper}") String pepper
+            @Value("${security.password.pepper}") String pepper
     ) {
         this.passwordEncoder = passwordEncoder;
         this.pepper = pepper;
