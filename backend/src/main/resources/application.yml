@@ -1,1 +1,3 @@
-
+spring:
+  application:
+    name: lunch-order-backend
