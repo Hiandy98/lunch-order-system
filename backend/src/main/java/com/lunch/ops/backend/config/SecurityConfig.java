@@ -1,4 +1,4 @@
-package com.lunch.ops.backend.security;
+package com.lunch.ops.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

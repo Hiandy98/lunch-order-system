@@ -1,4 +1,4 @@
-package com.lunch.ops.backend.security;
+package com.lunch.ops.backend.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

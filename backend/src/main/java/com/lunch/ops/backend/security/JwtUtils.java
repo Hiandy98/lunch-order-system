@@ -1,5 +1,6 @@
 package com.lunch.ops.backend.security;
 
+import com.lunch.ops.backend.config.JwtSetting;
 import com.lunch.ops.backend.user.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
