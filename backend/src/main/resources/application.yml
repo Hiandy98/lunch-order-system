@@ -33,3 +33,7 @@ management:
 security:
   password:
     pepper: ${PASSWORD_PEPPER_SECRET}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 604800000
