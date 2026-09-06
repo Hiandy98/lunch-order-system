@@ -15,11 +15,14 @@ public record UserRegisterCommand(
         if (realName == null || realName.isBlank()) {
             throw new IllegalArgumentException("真實姓名不能為空");
         }
-        if (password == null || password.isBlank()) {
-            throw new IllegalArgumentException("密碼長度不能小於 6 位");
+        if (classroom == null || classroom.isBlank()) {
+            throw new IllegalArgumentException("班級不能為空"); // 補上班級驗證
         }
         if (number <= 0) {
             throw new IllegalArgumentException("座號必須大於 0");
+        }
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("密碼不可為空");
         }
     }
 }
