@@ -1,7 +1,7 @@
 package com.lunch.ops.backend.security;
 
 import com.lunch.ops.backend.user.dto.LoginFailureResponse;
-import com.lunch.ops.backend.user.dto.LoginResponse;
+import com.lunch.ops.backend.user.dto.LoginSuccessResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class SecurityHandlerConfig {
             User principal = (User) authentication.getPrincipal();
             Objects.requireNonNull(principal, "Principal 不可為空");
 
-            LoginResponse responseData = new LoginResponse(
+            LoginSuccessResponse responseData = new LoginSuccessResponse(
                     true,
                     "登入成功",
                     getMockJwtToken(principal)
