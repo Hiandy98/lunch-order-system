@@ -1,4 +1,4 @@
-package com.lunch.ops.backend.user.dto;
+package com.lunch.ops.backend.user.service.model;
 
 public record UserRegisterCommand(
         String id,  // 學號
