@@ -2,6 +2,8 @@ package com.lunch.ops.backend.security;
 
 import com.lunch.ops.backend.config.JwtSetting;
 import com.lunch.ops.backend.user.entity.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -41,4 +43,34 @@ public class JwtUtils {
     private Date calculateExpiryTime(Date now) {
         return new Date(now.getTime() + jwtSetting.getExpiration());
     }
+
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(jwtSignerKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            return !isExpired(claims);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    private boolean isExpired(Claims claims) {
+        return claims.getExpiration().before(new Date());
+    }
+
+    public String getUserIdFromToken(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    public String getRoleFromToken(String token) {
+        return extractAllClaims(token).get("role", String.class);
+    }
+
 }
