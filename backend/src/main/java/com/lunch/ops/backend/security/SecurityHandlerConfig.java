@@ -1,11 +1,14 @@
 package com.lunch.ops.backend.security;
 
+import com.lunch.ops.backend.config.JwtSetting;
 import com.lunch.ops.backend.user.dto.LoginFailureResponse;
 import com.lunch.ops.backend.user.dto.LoginResponse;
 import com.lunch.ops.backend.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -15,12 +18,17 @@ import java.util.Objects;
 
 @Configuration
 public class SecurityHandlerConfig {
+
     private final ObjectMapper objectMapper;
     private final JwtUtils jwtUtils;
+    private final JwtSetting jwtSetting;
 
-    public SecurityHandlerConfig(ObjectMapper objectMapper, JwtUtils jwtUtils) {
+    public SecurityHandlerConfig(
+            ObjectMapper objectMapper, JwtUtils jwtUtils, JwtSetting jwtSetting
+    ) {
         this.objectMapper = objectMapper;
         this.jwtUtils = jwtUtils;
+        this.jwtSetting = jwtSetting;
     }
 
     @Bean
@@ -32,10 +40,22 @@ public class SecurityHandlerConfig {
             CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
             Objects.requireNonNull(principal, "Principal 不可為空");
 
+            String jwtToken = getJwtToken(authentication);
+
+            ResponseCookie jwtCookie =  ResponseCookie.from("AUTH_TOKEN", jwtToken)
+                    .httpOnly(true)
+                    .secure(false)  // 我們沒有https 有了再改true
+                    .path("/")  // 整個網站的API都能拿到
+                    .maxAge(jwtSetting.getExpiration())
+                    .sameSite("Lax")  // 防 CSRF 攻擊
+                    .build();
+
+            response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+
             LoginResponse responseData = new LoginResponse(
                     true,
                     "登入成功",
-                    getJwtToken(authentication)
+                    "Bearer " + jwtToken
             );
 
             objectMapper.writeValue(response.getWriter(), responseData);
@@ -47,7 +67,7 @@ public class SecurityHandlerConfig {
 
         User userEntity = userDetails.getUserEntity();
 
-        return "Bearer " + jwtUtils.generateToken(userEntity);
+        return jwtUtils.generateToken(userEntity);
     }
 
     @Bean
