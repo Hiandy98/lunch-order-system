@@ -1,6 +1,7 @@
 package com.lunch.ops.backend.config;
 
 import com.lunch.ops.backend.security.JsonAuthenticationFilter;
+import com.lunch.ops.backend.security.JwtAuthenticationFilter;
 import com.lunch.ops.backend.user.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,7 +51,8 @@ public class SecurityConfig {
             HttpSecurity http,
             AuthenticationManager authenticationManager,
             AuthenticationSuccessHandler authenticationSuccessHandler,
-            AuthenticationFailureHandler authenticationFailureHandler
+            AuthenticationFailureHandler authenticationFailureHandler,
+            JwtAuthenticationFilter jwtAuthenticationFilter
     ) throws Exception {
         JsonAuthenticationFilter jsonFilter = new JsonAuthenticationFilter(authenticationManager, this.objectMapper);
         jsonFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
@@ -64,6 +66,7 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated()
             )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterAt(jsonFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
