@@ -23,17 +23,7 @@ public class DefaultUserRegisterService implements UserRegisterService {
     @Override
     @Transactional
     public UserRegisterResult execute(UserRegisterCommand command) {
-        if (userRepository.existsById(command.id())) {
-            throw new IllegalArgumentException("該學號已被註冊");
-        }
-        if (userRepository.existsByNickName(command.nickName())) {
-            throw new IllegalArgumentException("該暱稱已被使用");
-        }
-        if (userRepository.existsByClassroomAndNumber(command.classroom(), command.number())) {
-            throw new IllegalArgumentException(
-                    String.format("%s 班的 %d 號已被註冊", command.classroom(), command.number())
-            );
-        }
+        validateRegisterCommand(command);
 
         User user = User.register(
                 command.id(),
@@ -52,5 +42,19 @@ public class DefaultUserRegisterService implements UserRegisterService {
     private HashedPassword generateHashedPassword(String rawPassword) {
         String encodedPassword = passwordEncoder.encode(rawPassword);
         return new HashedPassword(encodedPassword);
+    }
+
+    private void validateRegisterCommand(UserRegisterCommand command) {
+        if (userRepository.existsById(command.id())) {
+            throw new IllegalArgumentException("該學號已被註冊");
+        }
+        if (userRepository.existsByNickName(command.nickName())) {
+            throw new IllegalArgumentException("該暱稱已被使用");
+        }
+        if (userRepository.existsByClassroomAndNumber(command.classroom(), command.number())) {
+            throw new IllegalArgumentException(
+                    String.format("%s 班的 %d 號已被註冊", command.classroom(), command.number())
+            );
+        }
     }
 }
