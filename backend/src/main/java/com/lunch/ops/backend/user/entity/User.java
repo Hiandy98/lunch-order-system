@@ -82,6 +82,9 @@ public class User {
         if (realName == null || realName.isBlank()) {
             throw new IllegalArgumentException("真實姓名不可為空");
         }
+        if (nickName == null || nickName.isBlank()) {
+            throw new IllegalArgumentException("暱稱不可為空");
+        }
         if (classroom == null || classroom.isBlank()) {
             throw new IllegalArgumentException("班級不可為空");
         }
@@ -89,7 +92,7 @@ public class User {
             throw new IllegalArgumentException("座號必須大於 0");
         }
         this.realName = realName;
-        this.nickName = (nickName != null && !nickName.isBlank()) ? nickName : realName;
+        this.nickName = nickName;
         this.classroom = classroom;
         this.number = number;
     }
