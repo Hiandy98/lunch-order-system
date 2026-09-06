@@ -2,7 +2,7 @@ package com.lunch.ops.backend.config;
 
 import com.lunch.ops.backend.security.JsonAuthenticationFilter;
 import com.lunch.ops.backend.security.JwtAuthenticationFilter;
-import com.lunch.ops.backend.user.service.CustomUserDetailsService;
+import com.lunch.ops.backend.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ProviderManager;

@@ -1,16 +1,12 @@
-package com.lunch.ops.backend.user.service;
+package com.lunch.ops.backend.security;
 
-import com.lunch.ops.backend.security.CustomUserDetails;
 import com.lunch.ops.backend.user.entity.User;
 import com.lunch.ops.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor  // 自動生成必要參數

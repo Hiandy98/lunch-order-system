@@ -1,5 +1,7 @@
 package com.lunch.ops.backend.user.dto;
 
+import com.lunch.ops.backend.user.service.model.UserRegisterResult;
+
 public record UserRegisterResponse(
         String id,  // 學號
         String realName,

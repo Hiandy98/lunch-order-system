@@ -1,7 +1,8 @@
-package com.lunch.ops.backend.user.service;
+package com.lunch.ops.backend.user.service.impl;
 
-import com.lunch.ops.backend.user.dto.UserRegisterCommand;
-import com.lunch.ops.backend.user.dto.UserRegisterResult;
+import com.lunch.ops.backend.user.service.UserRegisterService;
+import com.lunch.ops.backend.user.service.model.UserRegisterCommand;
+import com.lunch.ops.backend.user.service.model.UserRegisterResult;
 import com.lunch.ops.backend.user.entity.HashedPassword;
 import com.lunch.ops.backend.user.entity.User;
 import com.lunch.ops.backend.user.repository.UserRepository;
