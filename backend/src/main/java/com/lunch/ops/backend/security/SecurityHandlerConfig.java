@@ -84,4 +84,14 @@ public class SecurityHandlerConfig {
             objectMapper.writeValue(response.getWriter(), responseData);
         };
     }
+
+    public static ResponseCookie generateLogoutCookie() {
+        return ResponseCookie.from("AUTH_TOKEN", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+    }
 }
