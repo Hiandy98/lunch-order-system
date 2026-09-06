@@ -1,11 +1,11 @@
 package com.lunch.ops.backend.user.dto;
 
 public record UserRegisterCommand(
-        String id,
+        String id,  // 學號
         String realName,
         String nickName,
         String classroom,
-        int number,
+        int number,  // 座號
         String password
 ) {
     public UserRegisterCommand {

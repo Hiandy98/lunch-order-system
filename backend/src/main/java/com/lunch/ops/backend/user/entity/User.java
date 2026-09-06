@@ -21,7 +21,7 @@ public class User {
 
     @Id
     @Column(length = 20)
-    private String id;
+    private String id;  // 學號
 
     @Column(nullable = false, length = 100)
     private String realName;
@@ -33,7 +33,7 @@ public class User {
     private String classroom;
 
     @Column(nullable = false)
-    private int number;
+    private int number;  // 座號
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
