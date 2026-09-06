@@ -2,7 +2,7 @@ package com.lunch.ops.backend.security;
 
 import com.lunch.ops.backend.config.JwtSetting;
 import com.lunch.ops.backend.user.dto.LoginFailureResponse;
-import com.lunch.ops.backend.user.dto.LoginResponse;
+import com.lunch.ops.backend.user.dto.LoginSuccessResponse;
 import com.lunch.ops.backend.user.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -52,7 +52,7 @@ public class SecurityHandlerConfig {
 
             response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
 
-            LoginResponse responseData = new LoginResponse(
+            LoginSuccessResponse responseData = new LoginSuccessResponse(
                     true,
                     "登入成功",
                     "Bearer " + jwtToken
