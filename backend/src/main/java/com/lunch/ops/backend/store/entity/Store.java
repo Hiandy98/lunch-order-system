@@ -1,8 +1,19 @@
 package com.lunch.ops.backend.store.entity;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "store")
 public class Store {
@@ -17,62 +28,29 @@ public class Store {
     @Embedded
     private StoreContent content;
 
-    @Column(name = "create_at", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
+    @CreatedDate
+    @Column(name = "create_at", nullable = false, updatable = false)
+    private LocalDateTime createAt;
 
-    @Column(name = "update_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateAt;
+    @LastModifiedDate
+    @Column(name = "update_at", nullable = false)
+    private LocalDateTime updateAt;
 
-    protected Store() {
+    public static Store create(String name, StoreContent content) {
+        Store store = new Store();
+        store.updateStoreInfo(name);
+        store.updateContent(content);
+        return store;
     }
 
-    public Store(String name, StoreContent content) {
+    public void updateStoreInfo(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("store content could not be empty");
+        }
         this.name = name;
-        this.content = content;
     }
 
-    public void updateStoreInfo(String newName) {
-        if (newName != null && !newName.trim().isEmpty()) {
-            this.name = newName;
-        }
-    }
-
-    public void updateContent(StoreContent newContent) {
-        if (newContent != null) {
-            this.content = newContent;
-        }
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createAt = new Date();
-        this.updateAt = this.createAt;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updateAt = new Date();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public StoreContent getContent() {
-        return content;
-    }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
+    public void updateContent(StoreContent content) {
+        this.content = Objects.requireNonNull(content, "store content could not be empty");
     }
 }
