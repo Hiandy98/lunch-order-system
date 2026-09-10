@@ -1,5 +1,6 @@
 package com.lunch.ops.backend.user.service.impl;
 
+import com.lunch.ops.backend.common.exception.ConflictError;
 import com.lunch.ops.backend.user.service.UserRegisterService;
 import com.lunch.ops.backend.user.service.model.UserRegisterCommand;
 import com.lunch.ops.backend.user.service.model.UserRegisterResult;
@@ -47,13 +48,13 @@ public class DefaultUserRegisterService implements UserRegisterService {
 
     private void validateRegisterCommand(UserRegisterCommand command) {
         if (userRepository.existsById(command.id())) {
-            throw new IllegalArgumentException("該學號已被註冊");
+            throw new ConflictError("該學號已被註冊");
         }
         if (userRepository.existsByNickName(command.nickName())) {
-            throw new IllegalArgumentException("該暱稱已被使用");
+            throw new ConflictError("該暱稱已被使用");
         }
         if (userRepository.existsByClassroomAndNumber(command.classroom(), command.number())) {
-            throw new IllegalArgumentException(
+            throw new ConflictError(
                     String.format("%s 班的 %d 號已被註冊", command.classroom(), command.number())
             );
         }
