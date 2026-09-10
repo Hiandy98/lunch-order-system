@@ -3,6 +3,7 @@ package com.lunch.ops.backend.user.controller;
 import com.lunch.ops.backend.user.dto.UserInfoResponse;
 import com.lunch.ops.backend.user.dto.UserRegisterRequest;
 import com.lunch.ops.backend.user.dto.UserRegisterResponse;
+import com.lunch.ops.backend.user.dto.UserUpdateRequest;
 import com.lunch.ops.backend.user.service.UserRegisterService;
 import com.lunch.ops.backend.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -31,5 +32,13 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserInfoResponse> me(@AuthenticationPrincipal String id) {
         return ResponseEntity.ok(UserInfoResponse.from(userService.getUserById(id)));
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<UserInfoResponse> update(
+            @AuthenticationPrincipal String id, @RequestBody UserUpdateRequest request
+    ) {
+        return ResponseEntity
+                .ok(UserInfoResponse.from((userService.updateUserInformation(id, request.toCommand()))));
     }
 }
