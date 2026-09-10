@@ -15,7 +15,7 @@ public record UserInfoResult(
         Role role,
         LocalDateTime updateAt
 ) {
-    public static UserInfoResult form(User user) {
+    public static UserInfoResult from(User user) {
         return new UserInfoResult(
                 user.getId(),
                 user.getRealName(),
