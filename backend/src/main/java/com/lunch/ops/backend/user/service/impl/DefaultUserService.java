@@ -33,13 +33,15 @@ public class DefaultUserService implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundError("找不到該使用者，ID: " + id));
 
-        validateUpdateCommand(user, updateCommand);
+        UserUpdateCommand mergedCommand = updateCommand.mergeWith(user);
+
+        validateUpdateCommand(user, mergedCommand);
 
         user.updateProfile(
-                updateCommand.realName(),
-                updateCommand.nickName(),
-                updateCommand.classroom(),
-                updateCommand.number()
+                mergedCommand.realName(),
+                mergedCommand.nickName(),
+                mergedCommand.classroom(),
+                mergedCommand.number()
         );
 
         User updatedUser = userRepository.save(user);

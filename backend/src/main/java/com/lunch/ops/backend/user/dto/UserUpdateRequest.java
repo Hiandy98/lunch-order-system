@@ -6,7 +6,7 @@ public record UserUpdateRequest(
         String realName,
         String nickName,
         String classroom,
-        int number
+        Integer number
 ) {
     public UserUpdateCommand toCommand() {
         return new UserUpdateCommand(realName, nickName, classroom, number);

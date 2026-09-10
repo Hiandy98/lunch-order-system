@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity.ok(UserInfoResponse.from(userService.getUserById(id)));
     }
 
-    @PutMapping("/me")
+    @PatchMapping("/me")
     public ResponseEntity<UserInfoResponse> update(
             @AuthenticationPrincipal String id, @RequestBody UserUpdateRequest request
     ) {
