@@ -6,5 +6,5 @@ import com.lunch.ops.backend.user.service.model.UserUpdateCommand;
 public interface UserService {
     UserInfoResult getUserById(String id);
 
-    UserInfoResult updateUserInformation(UserUpdateCommand updateCommand);
+    UserInfoResult updateUserInformation(String id, UserUpdateCommand updateCommand);
 }
