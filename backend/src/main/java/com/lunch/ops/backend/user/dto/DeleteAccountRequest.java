@@ -5,7 +5,7 @@ import com.lunch.ops.backend.user.service.model.UserDeleteCommand;
 public record DeleteAccountRequest(
         String rawPassword
 ) {
-    public UserDeleteCommand toCommand(DeleteAccountRequest request) {
+    public UserDeleteCommand toCommand() {
         return new UserDeleteCommand(rawPassword);
     }
 }
