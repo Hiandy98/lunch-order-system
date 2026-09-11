@@ -42,9 +42,21 @@ public class UserController {
 
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteUser(
-            @AuthenticationPrincipal String id, @RequestBody DeleteAccountRequest request, HttpServletResponse response
+            @AuthenticationPrincipal String id,
+            @RequestBody DeleteAccountRequest request,
+            HttpServletResponse response
     ) {
         userService.deleteUser(id, request.toCommand(), response);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<Void> changePassword(
+            @AuthenticationPrincipal String id,
+            @RequestBody ChangePasswordRequest request,
+            HttpServletResponse response
+    ) {
+        userService.changePassword(id, request.toCommand(), response);
         return ResponseEntity.noContent().build();
     }
 

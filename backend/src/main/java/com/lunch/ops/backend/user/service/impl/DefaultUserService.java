@@ -1,14 +1,13 @@
 package com.lunch.ops.backend.user.service.impl;
 
-import com.lunch.ops.backend.common.exception.ConflictError;
-import com.lunch.ops.backend.common.exception.FileParseError;
-import com.lunch.ops.backend.common.exception.NotFoundError;
-import com.lunch.ops.backend.common.exception.UnauthorizedError;
+import com.lunch.ops.backend.common.exception.*;
 import com.lunch.ops.backend.security.PasswordCryptoEngine;
+import com.lunch.ops.backend.user.entity.HashedPassword;
 import com.lunch.ops.backend.user.entity.User;
 import com.lunch.ops.backend.user.repository.UserRepository;
 import com.lunch.ops.backend.user.service.AuthService;
 import com.lunch.ops.backend.user.service.UserService;
+import com.lunch.ops.backend.user.service.model.ChangePasswordCommand;
 import com.lunch.ops.backend.user.service.model.UserDeleteCommand;
 import com.lunch.ops.backend.user.service.model.UserInfoResult;
 import com.lunch.ops.backend.user.service.model.UserUpdateCommand;
@@ -114,5 +113,29 @@ public class DefaultUserService implements UserService {
         authService.logout(response);
 
         userRepository.delete(user);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(String id, ChangePasswordCommand command, HttpServletResponse response) {
+        User user = getUserEntityById(id);
+
+        if (!passwordCryptoEngine.verify(command.currentPassword(), user.getHashedPassword())) {
+            throw new UnauthorizedError("密碼錯誤");
+        }
+
+        if (passwordCryptoEngine.matches(user.getPassword(), command.newPassword())) {
+            throw new InvalidBusinessLogicException("新密碼不可與舊密碼相同");
+        }
+
+        user.changePassword(generateHashedPassword(command.newPassword()));
+
+        authService.logout(response);
+
+        userRepository.save(user);
+    }
+
+    private HashedPassword generateHashedPassword(String rawPassword) {
+        return passwordCryptoEngine.hash(rawPassword);
     }
 }
