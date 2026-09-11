@@ -3,9 +3,12 @@ package com.lunch.ops.backend.user.service.impl;
 import com.lunch.ops.backend.common.exception.ConflictError;
 import com.lunch.ops.backend.common.exception.FileParseError;
 import com.lunch.ops.backend.common.exception.NotFoundError;
+import com.lunch.ops.backend.common.exception.UnauthorizedError;
+import com.lunch.ops.backend.security.PasswordCryptoEngine;
 import com.lunch.ops.backend.user.entity.User;
 import com.lunch.ops.backend.user.repository.UserRepository;
 import com.lunch.ops.backend.user.service.UserService;
+import com.lunch.ops.backend.user.service.model.UserDeleteCommand;
 import com.lunch.ops.backend.user.service.model.UserInfoResult;
 import com.lunch.ops.backend.user.service.model.UserUpdateCommand;
 import org.springframework.stereotype.Service;
@@ -15,23 +18,29 @@ import org.springframework.transaction.annotation.Transactional;
 public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordCryptoEngine passwordCryptoEngine;
 
-    public DefaultUserService(UserRepository userRepository) {
+    public DefaultUserService(UserRepository userRepository, PasswordCryptoEngine passwordCryptoEngine) {
         this.userRepository = userRepository;
+        this.passwordCryptoEngine = passwordCryptoEngine;
     }
 
     @Override
     public UserInfoResult getUserById(String id) {
-        return userRepository.findById(id)
-                .map(UserInfoResult::from)
-                .orElseThrow(() -> new NotFoundError("找不到該使用者，ID: " + id));
+        User user = getUserEntityById(id);
+        return UserInfoResult.from(user);
     }
+
+    private User getUserEntityById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundError(String.format("找不到該使用者，ID: %s", id)));
+    }
+
 
     @Override
     @Transactional
     public UserInfoResult updateUserInformation(String id, UserUpdateCommand updateCommand) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundError("找不到該使用者，ID: " + id));
+        User user = getUserEntityById(id);
 
         UserUpdateCommand mergedCommand = updateCommand.mergeWith(user);
 
@@ -83,5 +92,17 @@ public class DefaultUserService implements UserService {
     private boolean isClassroomOrNumberChanged(User currentUser, UserUpdateCommand command) {
         return !currentUser.getClassroom().equals(command.classroom())
                 || currentUser.getNumber() != command.number();
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(String id, UserDeleteCommand deleteCommand) {
+        User user = getUserEntityById(id);
+
+        if (!user.verifyPassword(deleteCommand.rawPassword(), passwordCryptoEngine)) {
+            throw new UnauthorizedError("密碼錯誤");
+        }
+
+        userRepository.delete(user);
     }
 }
