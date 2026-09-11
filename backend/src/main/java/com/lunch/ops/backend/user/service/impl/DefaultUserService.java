@@ -7,10 +7,12 @@ import com.lunch.ops.backend.common.exception.UnauthorizedError;
 import com.lunch.ops.backend.security.PasswordCryptoEngine;
 import com.lunch.ops.backend.user.entity.User;
 import com.lunch.ops.backend.user.repository.UserRepository;
+import com.lunch.ops.backend.user.service.AuthService;
 import com.lunch.ops.backend.user.service.UserService;
 import com.lunch.ops.backend.user.service.model.UserDeleteCommand;
 import com.lunch.ops.backend.user.service.model.UserInfoResult;
 import com.lunch.ops.backend.user.service.model.UserUpdateCommand;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +21,16 @@ public class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordCryptoEngine passwordCryptoEngine;
+    private final AuthService authService;
 
-    public DefaultUserService(UserRepository userRepository, PasswordCryptoEngine passwordCryptoEngine) {
+    public DefaultUserService(
+            UserRepository userRepository,
+            PasswordCryptoEngine passwordCryptoEngine,
+            AuthService authService
+    ) {
         this.userRepository = userRepository;
         this.passwordCryptoEngine = passwordCryptoEngine;
+        this.authService = authService;
     }
 
     @Override
@@ -96,12 +104,14 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(String id, UserDeleteCommand deleteCommand) {
+    public void deleteUser(String id, UserDeleteCommand deleteCommand, HttpServletResponse response) {
         User user = getUserEntityById(id);
 
         if (!passwordCryptoEngine.verify(deleteCommand.rawPassword(), user.getHashedPassword())) {
             throw new UnauthorizedError("密碼錯誤");
         }
+
+        authService.logout(response);
 
         userRepository.delete(user);
     }

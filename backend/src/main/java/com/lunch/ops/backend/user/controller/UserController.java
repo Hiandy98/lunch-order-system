@@ -3,6 +3,7 @@ package com.lunch.ops.backend.user.controller;
 import com.lunch.ops.backend.user.dto.*;
 import com.lunch.ops.backend.user.service.UserRegisterService;
 import com.lunch.ops.backend.user.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,9 +42,9 @@ public class UserController {
 
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteUser(
-            @AuthenticationPrincipal String id, @RequestBody DeleteAccountRequest request
+            @AuthenticationPrincipal String id, @RequestBody DeleteAccountRequest request, HttpServletResponse response
     ) {
-        userService.deleteUser(id, request.toCommand());
+        userService.deleteUser(id, request.toCommand(), response);
         return ResponseEntity.noContent().build();
     }
 
