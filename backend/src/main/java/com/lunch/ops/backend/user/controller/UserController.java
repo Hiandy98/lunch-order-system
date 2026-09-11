@@ -1,9 +1,6 @@
 package com.lunch.ops.backend.user.controller;
 
-import com.lunch.ops.backend.user.dto.UserInfoResponse;
-import com.lunch.ops.backend.user.dto.UserRegisterRequest;
-import com.lunch.ops.backend.user.dto.UserRegisterResponse;
-import com.lunch.ops.backend.user.dto.UserUpdateRequest;
+import com.lunch.ops.backend.user.dto.*;
 import com.lunch.ops.backend.user.service.UserRegisterService;
 import com.lunch.ops.backend.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -41,4 +38,13 @@ public class UserController {
         return ResponseEntity
                 .ok(UserInfoResponse.from((userService.updateUserInformation(id, request.toCommand()))));
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteUser(
+            @AuthenticationPrincipal String id, @RequestBody DeleteAccountRequest request
+    ) {
+        userService.deleteUser(id, request.toCommand());
+        return ResponseEntity.noContent().build();
+    }
+
 }
