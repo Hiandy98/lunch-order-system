@@ -3,6 +3,7 @@ package com.lunch.ops.backend.config;
 import com.lunch.ops.backend.security.JsonAuthenticationFilter;
 import com.lunch.ops.backend.security.JwtAuthenticationFilter;
 import com.lunch.ops.backend.security.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ProviderManager;
@@ -29,11 +30,6 @@ public class SecurityConfig {
 
     public SecurityConfig(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new Argon2PasswordEncoder(16, 32, 1, 65536, 3);
     }
 
     @Bean

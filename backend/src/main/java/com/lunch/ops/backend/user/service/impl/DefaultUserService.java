@@ -99,7 +99,7 @@ public class DefaultUserService implements UserService {
     public void deleteUser(String id, UserDeleteCommand deleteCommand) {
         User user = getUserEntityById(id);
 
-        if (!user.verifyPassword(deleteCommand.rawPassword(), passwordCryptoEngine)) {
+        if (!passwordCryptoEngine.verify(deleteCommand.rawPassword(), user.getHashedPassword())) {
             throw new UnauthorizedError("密碼錯誤");
         }
 

@@ -1,6 +1,7 @@
 package com.lunch.ops.backend.user.service.impl;
 
 import com.lunch.ops.backend.common.exception.ConflictError;
+import com.lunch.ops.backend.security.PasswordCryptoEngine;
 import com.lunch.ops.backend.user.service.UserRegisterService;
 import com.lunch.ops.backend.user.service.model.UserRegisterCommand;
 import com.lunch.ops.backend.user.service.model.UserRegisterResult;
@@ -15,11 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class DefaultUserRegisterService implements UserRegisterService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordCryptoEngine passwordCryptoEngine;
 
-    public DefaultUserRegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DefaultUserRegisterService(UserRepository userRepository, PasswordCryptoEngine passwordCryptoEngine) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordCryptoEngine = passwordCryptoEngine;
     }
 
     @Override
@@ -42,8 +43,7 @@ public class DefaultUserRegisterService implements UserRegisterService {
     }
 
     private HashedPassword generateHashedPassword(String rawPassword) {
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-        return new HashedPassword(encodedPassword);
+        return passwordCryptoEngine.hash(rawPassword);
     }
 
     private void validateRegisterCommand(UserRegisterCommand command) {

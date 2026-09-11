@@ -105,7 +105,7 @@ public class User {
         this.role = Objects.requireNonNull(newRole, "身分不可為空");
     }
 
-    public boolean verifyPassword(String rawPassword, PasswordCryptoEngine cryptoEngine) {
-        return cryptoEngine.matches(rawPassword, this.password);
+    public HashedPassword getHashedPassword() {
+        return new HashedPassword(this.password);
     }
 }
