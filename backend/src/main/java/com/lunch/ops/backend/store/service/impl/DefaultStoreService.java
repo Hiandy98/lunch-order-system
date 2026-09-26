@@ -6,7 +6,9 @@ import com.lunch.ops.backend.store.repository.StoreRepository;
 import com.lunch.ops.backend.store.service.StoreService;
 import com.lunch.ops.backend.store.service.model.StoreCreateCommand;
 import com.lunch.ops.backend.store.service.model.StoreCreateResult;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DefaultStoreService implements StoreService {
 
     private final StoreRepository storeRepository;
