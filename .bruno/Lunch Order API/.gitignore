@@ -7,3 +7,8 @@ node_modules
 # OS files
 .DS_Store
 Thumbs.db
+
+# Bruno
+**/.bruno/**/environments/*.env.json
+**/environments/*.env.json
+**/.bruno/**/cookies.json
