@@ -1,5 +1,7 @@
 package com.lunch.ops.backend.store.service.impl;
 
+import com.lunch.ops.backend.common.exception.ConflictError;
+import com.lunch.ops.backend.store.entity.Store;
 import com.lunch.ops.backend.store.repository.StoreRepository;
 import com.lunch.ops.backend.store.service.StoreService;
 import com.lunch.ops.backend.store.service.model.StoreCreateCommand;
@@ -15,6 +17,19 @@ public class DefaultStoreService implements StoreService {
 
     @Override
     public StoreCreateResult create(StoreCreateCommand command) {
-        return null;
+
+        Store store = Store.create(
+                command.name(),
+                command.url(),
+                command.imageUrl(),
+                command.description(),
+                command.phoneNumber(),
+                command.address(),
+                command.menu()
+        );
+
+        Store saveStore = storeRepository.save(store);
+
+        return StoreCreateResult.from(saveStore);
     }
 }
