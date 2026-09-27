@@ -2,6 +2,7 @@ package com.lunch.ops.backend.store.controller;
 
 import com.lunch.ops.backend.store.dto.StoreCreateRequest;
 import com.lunch.ops.backend.store.dto.StoreCreateResponse;
+import com.lunch.ops.backend.store.dto.StoreInfoResponse;
 import com.lunch.ops.backend.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class StoreController {
     }
 
     @PostMapping
-    public ResponseEntity<StoreCreateResponse> create(@RequestBody StoreCreateRequest request) {
+    public ResponseEntity<StoreCreateResponse> createStore(@RequestBody StoreCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(StoreCreateResponse.from(storeService.create(request.toCommand())));
     }
@@ -27,5 +28,11 @@ public class StoreController {
     public ResponseEntity<Void> deleteStore(@PathVariable int id) {
         storeService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StoreInfoResponse> getStoreInfo(@PathVariable int id) {
+        return ResponseEntity.ok()
+                .body(StoreInfoResponse.from(storeService.get(id)));
     }
 }
