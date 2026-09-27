@@ -67,6 +67,15 @@ public class Store {
         return store;
     }
 
+    public void update(
+            String name, String url, String imageUrl, String description, String phoneNumber, String address,
+            List<Menu> menu
+    ) {
+        this.changeName(name);
+        this.updateDetails(url, imageUrl, description, phoneNumber, address);
+        this.updateMenu(menu);
+    }
+
     public void changeName(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("store name could not be empty");

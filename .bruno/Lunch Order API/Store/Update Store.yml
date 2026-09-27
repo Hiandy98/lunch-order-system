@@ -1,0 +1,56 @@
+info:
+  name: Update Store
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8081/api/v1/stores/:id
+  params:
+    - name: id
+      value: "2"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "測試餐廳1",
+        "url": null,
+        "imageUrl": null,
+        "description": "一間餐聽",
+        "phoneNumber": null,
+        "address": null,
+        "menu": [
+          {
+            "name": "炒飯",
+            "price": 85.00,
+            "customOptions": [
+              {
+                "name": null,
+                "price": null
+              },
+              {
+                "name": null,
+                "price": null
+              },
+              {
+                "name": null,
+                "price": null
+              }
+            ]
+          },
+          {
+            "name": "紅茶",
+            "price": 40.00,
+            "customOptions": []
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
