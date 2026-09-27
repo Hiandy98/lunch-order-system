@@ -1,20 +1,16 @@
 info:
-  name: User Create
+  name: Login
   type: http
-  seq: 2
+  seq: 1
 
 http:
   method: POST
-  url: http://localhost:8081/api/v1/users/register
+  url: http://localhost:8081/api/v1/auth/login
   body:
     type: json
     data: |-
       {
-        "id": "140000",
-        "realName": "TestUser",
-        "nickName": "Test",
-        "classroom": "216",
-        "number": 36,
+        "loginInput": "Test",
         "password": "password123"
       }
   auth: inherit
