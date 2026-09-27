@@ -1,0 +1,27 @@
+info:
+  name: User Create
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8081/api/v1/users/register
+  body:
+    type: json
+    data: |-
+      {
+        "id": "140000",
+        "realName": "TestUser",
+        "nickName": "Test",
+        "classroom": "216",
+        "number": 36,
+        "password": "password123"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
