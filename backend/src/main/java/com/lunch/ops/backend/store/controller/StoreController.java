@@ -3,6 +3,7 @@ package com.lunch.ops.backend.store.controller;
 import com.lunch.ops.backend.store.dto.StoreCreateRequest;
 import com.lunch.ops.backend.store.dto.StoreCreateResponse;
 import com.lunch.ops.backend.store.dto.StoreInfoResponse;
+import com.lunch.ops.backend.store.dto.StoreUpdateRequest;
 import com.lunch.ops.backend.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,11 @@ public class StoreController {
     public ResponseEntity<StoreInfoResponse> getStoreInfo(@PathVariable int id) {
         return ResponseEntity.ok()
                 .body(StoreInfoResponse.from(storeService.get(id)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateStore(@PathVariable int id, @RequestBody StoreUpdateRequest request) {
+        storeService.update(id, request.toCommand());
+        return ResponseEntity.noContent().build();
     }
 }

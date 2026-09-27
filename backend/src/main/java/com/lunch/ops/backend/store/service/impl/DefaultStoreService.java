@@ -8,7 +8,9 @@ import com.lunch.ops.backend.store.service.StoreService;
 import com.lunch.ops.backend.store.service.model.StoreCreateCommand;
 import com.lunch.ops.backend.store.service.model.StoreCreateResult;
 import com.lunch.ops.backend.store.service.model.StoreInfoResult;
+import com.lunch.ops.backend.store.service.model.StoreUpdateCommand;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DefaultStoreService implements StoreService {
@@ -20,6 +22,7 @@ public class DefaultStoreService implements StoreService {
     }
 
     @Override
+    @Transactional
     public StoreCreateResult create(StoreCreateCommand command) {
 
         Store store = Store.create(
@@ -43,6 +46,7 @@ public class DefaultStoreService implements StoreService {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         Store store = getStoreEntityById(id);
         storeRepository.delete(store);
@@ -52,5 +56,21 @@ public class DefaultStoreService implements StoreService {
     public StoreInfoResult get(int id) {
         Store store = getStoreEntityById(id);
         return StoreInfoResult.from(store);
+    }
+
+    @Override
+    @Transactional
+    public void update(int id, StoreUpdateCommand command) {
+        Store store = getStoreEntityById(id);
+
+        store.update(
+                command.name(),
+                command.url(),
+                command.imageUrl(),
+                command.description(),
+                command.phoneNumber(),
+                command.address(),
+                command.menu()
+        );
     }
 }
