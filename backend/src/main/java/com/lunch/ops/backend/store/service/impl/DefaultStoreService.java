@@ -1,6 +1,7 @@
 package com.lunch.ops.backend.store.service.impl;
 
 import com.lunch.ops.backend.common.exception.ConflictError;
+import com.lunch.ops.backend.common.exception.NotFoundError;
 import com.lunch.ops.backend.store.entity.Store;
 import com.lunch.ops.backend.store.repository.StoreRepository;
 import com.lunch.ops.backend.store.service.StoreService;
@@ -34,4 +35,13 @@ public class DefaultStoreService implements StoreService {
 
         return StoreCreateResult.from(saveStore);
     }
+
+    @Override
+    public void delete(int id) {
+        Store store = storeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundError(String.format("找不到餐廳, ID: %d", id)));
+
+        storeRepository.delete(store);
+    }
+
 }

@@ -1,11 +1,11 @@
 info:
   name: Create Store
   type: http
-  seq: 1
+  seq: 3
 
 http:
   method: POST
-  url: http://localhost:8081/api/v1/stores/create
+  url: http://localhost:8081/api/v1/stores
   body:
     type: json
     data: |-
