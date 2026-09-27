@@ -124,15 +124,13 @@ public class DefaultUserService implements UserService {
             throw new UnauthorizedError("密碼錯誤");
         }
 
-        if (passwordCryptoEngine.matches(user.getPassword(), command.newPassword())) {
+        if (passwordCryptoEngine.verify(command.newPassword(), user.getHashedPassword())) {
             throw new InvalidBusinessLogicException("新密碼不可與舊密碼相同");
         }
 
         user.changePassword(generateHashedPassword(command.newPassword()));
 
         authService.logout(response);
-
-        userRepository.save(user);
     }
 
     private HashedPassword generateHashedPassword(String rawPassword) {
