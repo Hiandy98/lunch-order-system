@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: http://localhost:8081/api/v1/stores/create
+  url: http://localhost:8081/api/v1/stores
   body:
     type: json
     data: |-
