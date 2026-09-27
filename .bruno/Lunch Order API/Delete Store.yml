@@ -1,0 +1,20 @@
+info:
+  name: Delete Store
+  type: http
+  seq: 4
+
+http:
+  method: DELETE
+  url: http://localhost:8081/api/v1/stores/:id
+  params:
+    - name: id
+      value: "1"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
