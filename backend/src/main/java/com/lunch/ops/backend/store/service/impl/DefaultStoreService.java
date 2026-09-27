@@ -37,19 +37,20 @@ public class DefaultStoreService implements StoreService {
         return StoreCreateResult.from(saveStore);
     }
 
+    private Store getStoreEntityById(int id) {
+        return storeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundError(String.format("找不到餐廳, ID: %d", id)));
+    }
+
     @Override
     public void delete(int id) {
-        Store store = storeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundError(String.format("找不到餐廳, ID: %d", id)));
-
+        Store store = getStoreEntityById(id);
         storeRepository.delete(store);
     }
 
     @Override
     public StoreInfoResult get(int id) {
-        Store store = storeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundError(String.format("找不到餐廳, ID: %d", id)));
-
+        Store store = getStoreEntityById(id);
         return StoreInfoResult.from(store);
     }
 }
