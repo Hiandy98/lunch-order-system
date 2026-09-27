@@ -7,6 +7,7 @@ import com.lunch.ops.backend.store.repository.StoreRepository;
 import com.lunch.ops.backend.store.service.StoreService;
 import com.lunch.ops.backend.store.service.model.StoreCreateCommand;
 import com.lunch.ops.backend.store.service.model.StoreCreateResult;
+import com.lunch.ops.backend.store.service.model.StoreInfoResult;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,12 +37,20 @@ public class DefaultStoreService implements StoreService {
         return StoreCreateResult.from(saveStore);
     }
 
+    private Store getStoreEntityById(int id) {
+        return storeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundError(String.format("找不到餐廳, ID: %d", id)));
+    }
+
     @Override
     public void delete(int id) {
-        Store store = storeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundError(String.format("找不到餐廳, ID: %d", id)));
-
+        Store store = getStoreEntityById(id);
         storeRepository.delete(store);
     }
 
+    @Override
+    public StoreInfoResult get(int id) {
+        Store store = getStoreEntityById(id);
+        return StoreInfoResult.from(store);
+    }
 }
