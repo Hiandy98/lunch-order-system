@@ -1,5 +1,7 @@
 package com.lunch.ops.backend.store.service;
 
-public interface StoreSessionService {
+import com.lunch.ops.backend.store.service.model.SessionActiveCommand;
 
+public interface StoreSessionService {
+    void activeStore(SessionActiveCommand command);
 }
